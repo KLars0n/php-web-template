@@ -1,8 +1,13 @@
 <?php
 
 include "connection.php";
-$sql = "show databases;";
+$name = $_GET['name'];
+$sql = "use $name";
+mysqli_query($connection, $sql);
+
+$sql = "show tables";
 $query = mysqli_query($connection, $sql);
+$column = 'Tables_in_'.$name;
 ?>
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -15,13 +20,11 @@ $query = mysqli_query($connection, $sql);
     </tr>
     </thead>
     <?php
-    while($zeile = mysqli_fetch_array($query))
+    while($row = mysqli_fetch_array($query))
     {
-        echo "<tr><td>". $zeile['Database'] . "</td><td><a href='db.php?name=".$zeile['Database']."'>Go in</a></td></tr>";
+        echo "<tr><td>". $row[$column] . "</td><td><a href='table.DbInspector?name=".$row[$column]."&db=".$name."'>Go in</a></td></tr>";
     }
     ?>
-</tbody>
+    </tbody>
 
 </table>
-
-
